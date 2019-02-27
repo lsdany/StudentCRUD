@@ -11,7 +11,7 @@ import java.util.List;
 //        origins = "*",
 //        maxAge = 3600,
 //        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @AllArgsConstructor
 @RestController
 @RequestMapping("/students/")
