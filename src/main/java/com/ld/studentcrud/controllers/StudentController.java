@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //@CrossOrigin(allowedHeaders = "*",
 //        origins = "*",
@@ -41,7 +42,7 @@ public class StudentController implements BaseController<StudentResource, Studen
     @Override
     @DeleteMapping("{id}")
     public void delete(@PathVariable String id) {
-
+        studentService.deleteStudent(id);
     }
 
 
@@ -49,12 +50,15 @@ public class StudentController implements BaseController<StudentResource, Studen
     @Override
     @GetMapping
     public Resources<Resource<StudentResource>> list() {
-        return null;
+
+        return Resources.wrap(studentService.getStudents().stream()
+                .map(s -> studentAssembler.toResource(s))
+                .collect(Collectors.toList()));
     }
 
     @Override
-    @PutMapping("{id}")
-    public StudentResource update(@PathVariable String id, @RequestBody Student student) {
-        return null;
+    @PutMapping()
+    public StudentResource update(@Valid @RequestBody Student student) {
+        return studentAssembler.toResource(studentService.updateStudent(student));
     }
 }

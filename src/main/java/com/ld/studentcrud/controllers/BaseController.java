@@ -27,6 +27,6 @@ public interface BaseController <T,U> {
 
     //@ApiOperation(value = "Update")
     @ResponseStatus(OK)
-    T update(final String id, final U u);
+    T update(final U u);
 
 }
