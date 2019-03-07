@@ -1,10 +1,15 @@
 package com.ld.studentcrud.controllers;
 
+import com.ld.studentcrud.assemblers.StudentAssembler;
 import com.ld.studentcrud.domain.Student;
+import com.ld.studentcrud.resources.StudentResource;
 import com.ld.studentcrud.services.StudentService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 //@CrossOrigin(allowedHeaders = "*",
@@ -15,34 +20,41 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/students/")
-public class StudentController {
+public class StudentController implements BaseController<StudentResource, Student> {
 
     private StudentService studentService;
+    private StudentAssembler studentAssembler;
 
-    @GetMapping
-    public List<Student> getStudents(){
-        return studentService.getStudents();
-    }
 
+    @Override
     @GetMapping("{id}")
-    public Student getStudentById(@PathVariable String id){
-        return studentService.getStudentById(id);
+    public StudentResource get(@PathVariable String id) {
+        return studentAssembler.toResource(studentService.getStudentById(id));
     }
 
-    @DeleteMapping("{id}")
-    public void deleteStudent(@PathVariable String id){
-        studentService.deleteStudent(id);
-    }
-
-    @CrossOrigin
+    @Override
     @PostMapping
-    public Student saveStudent(@RequestBody Student student){
-        return studentService.saveStudent(student);
+    public StudentResource create(@Valid @RequestBody Student student) {
+        return studentAssembler.toResource(studentService.saveStudent(student));
     }
 
-    @CrossOrigin
-    @PutMapping
-    public Student updateStudent(@RequestBody Student student){
-        return  studentService.updateStudent(student);
+    @Override
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable String id) {
+
+    }
+
+
+
+    @Override
+    @GetMapping
+    public Resources<Resource<StudentResource>> list() {
+        return null;
+    }
+
+    @Override
+    @PutMapping("{id}")
+    public StudentResource update(@PathVariable String id, @RequestBody Student student) {
+        return null;
     }
 }
